@@ -23,15 +23,15 @@ name: Push a new tag with minor update
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
 
-      - uses: actions-ecosystem/action-get-latest-tag@v1
+      - uses: AnnuletConsulting/action-get-latest-tag@v2
         id: get-latest-tag
 
       - uses: actions-ecosystem/action-bump-semver@v1
@@ -40,7 +40,7 @@ jobs:
           current_version: ${{ steps.get-latest-tag.outputs.tag }}
           level: minor
 
-      - uses: actions-ecosystem/action-push-tag@v1
+      - uses: AnnuletConsulting/action-push-tag@v1
         with:
           tag: ${{ steps.bump-semver.outputs.new_version }}
           message: '${{ steps.bump-semver.outputs.new_version }}: PR #${{ github.event.pull_request.number }} ${{ github.event.pull_request.title }}'

@@ -1,6 +1,6 @@
-name: Actions Ecosystem Action Push Tag
-description: Push a Git tag.
-author: Actions Ecosystem
+name: Action Push Tag
+description: Push a Git tag without docker
+author: Annulet Consulting
 inputs:
   tag:
     description: A Git tag name.
@@ -8,9 +8,17 @@ inputs:
   message:
     description: A message for the Git tag.
     required: false
-runs:
-  using: docker
-  image: Dockerfile
 branding:
   icon: search
   color: yellow
+runs:
+  using: "composite"
+  steps:
+    - name: push tag
+      shell: bash
+      run: |
+        git config user.name "${GITHUB_ACTOR}"
+        git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+
+        git tag -a "${{ inputs.tag }}" -m "${{ inputs.message }}"
+        git push origin "${{ inputs.tag }}"
